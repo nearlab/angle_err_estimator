@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(robot_controller)
+project(angle_err_estimator)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -15,16 +15,12 @@ find_package(catkin REQUIRED COMPONENTS
 set(EIGEN3_INCLUDE_DIRS /usr/share/eigen)
 
 add_message_files(DIRECTORY ${PROJECT_SOURCE_DIR}/msg FILES
-  Control.msg
-  Markers.msg
   State.msg
-  StateCov.msg
-  SpacecraftState.msg
 )
 
 generate_messages( DEPENDENCIES
   std_msgs
-  geometry_msgs
+  geometry_msgs 
 )
 
 catkin_package(CATKIN_DEPENDS
@@ -42,20 +38,13 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/include
 )
 
-add_executable(dynamics_node
-               src/dynamics_node.cpp)
-add_executable(sc_controller_node
-               src/sc_controller_node.cpp)
-add_executable(markers_node
-               src/markers_node.cpp)
 add_executable(estimator_node
                src/estimator_node.cpp
                src/simulator.cpp
-               src/quatMath.cpp
                src/params.cpp
                src/estimator.cpp)
 
-set(EXEC_LIST dynamics_node sc_controller_node markers_node estimator_node cans_controller_node)
+set(EXEC_LIST estimator_node)
 foreach(EXEC_FILE ${EXEC_LIST})
   target_link_libraries(${EXEC_FILE} ${catkin_LIBRARIES} Eigen3::Eigen)
   add_dependencies(${EXEC_FILE} ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
