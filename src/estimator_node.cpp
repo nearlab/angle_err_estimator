@@ -23,9 +23,12 @@ ros::Subscriber subMeas;
 
 ros::Time tsMeas;
 
-void measCallback(const angle_err_estimator::meas msg){
-  tsMarkers = msg.header.stamp;
-  z()
+void measCallback(const angle_err_estimator::Meas msg){
+  tsMeas = ros::Time(msg.tStamp);
+  z(0) = msg.r[0];
+  z(1) = msg.r[1];
+  z(2) = msg.v[0];
+  z(3) = msg.v[1];
 }   
 
 
@@ -33,64 +36,49 @@ int main(int argc, char** argv){
   ros::init(argc,argv,"estimator");
   std::string robotName;
   ros::NodeHandle nh;
-  nh.getParam("RobotName", robotName);
-  tsImu = ros::Time(0);
-  tsMarkers = ros::Time(0);
+  tsMeas = ros::Time(0);
 
-  subImu = nh.subscribe(robotName+std::string("/imu"),1000,imuCallback);
-  subMarkers = nh.subscribe(robotName+std::string("/markers"),1000,markersCallback);
-  pubState = nh.advertise<robot_controller::State>(robotName+std::string("/state"),1000);
-  pubStateCov = nh.advertise<robot_controller::StateCov>(robotName+std::string("/state_cov"),1000);
+  subImu = nh.subscribe(std::string("/meas"),1000,measCallback);
+  pubState = nh.advertise<angle_err_estimator::State>(std::string("/state"),1000);
   ros::Rate loop_rate(100);
-  ros::Time tsImuOld,tsMarkersOld;
-  bool first = true;
+  ros::Time tsMeasOld;
   ROS_INFO("Estimator Node Initialized");
 
   while(ros::ok()){
-    if(first){
+    if(!estimator.isInitialized()){
       //Do things
-      if(tsImu.toSec() == 0 || tsMarkers.toSec() == 0){
+      if(tsMeas.toSec() == 0){
         ros::spinOnce();
         loop_rate.sleep();
         continue;
       }
       estimator.estimateStateFromMarkers(zMarkers);
       ROS_INFO("Estimator Initialized");
-      first=false;
-    }else{
-      double dtImu = ((ros::Duration)(tsImu - tsImuOld)).toSec();
-      double dtMarkers = ((ros::Duration)(tsMarkers - tsMarkersOld)).toSec();
-      estimator.predict(zImu,dtImu);
-      // operating = true;
-      // while(editing){
-      //   waitRate.sleep();
-      // }
-      estimator.correct(zMarkers,dtMarkers);
-      // operating = false;
+    }else{// Predict and Correct
+      double dtMeas = ((ros::Duration)(tsMeas - tsMeasOld)).toSec();
+      estimator.predict(dtMeas);
+      estimator.correct(z);
     }
-    tsImuOld = ros::Time().fromNSec(tsImu.toNSec());
-    tsMarkersOld = ros::Time().fromNSec(tsMarkers.toNSec());
+    tsMeasOld = ros::Time().fromNSec(tsMeas.toNSec());
     
-    robot_controller::State stateMsg;
+    // Fill message
+    angle_err_estimator::State stateMsg;
     state = estimator.getState();
-    for(int i=0;i<3;i++){//There are better ways
+    for(int i=0;i<2;i++){
       stateMsg.r[i] = state(i);
-      stateMsg.q[i] = state(i+3);
-      stateMsg.v[i] = state(i+7);
-      stateMsg.ba[i] = state(i+10);
+      stateMsg.v[i] = state(i+2);
     }
-    stateMsg.q[3] = state(6);
     ros::Time tsNow = ros::Time::now();
     stateMsg.tStamp = tsNow.toSec();
     pubState.publish(stateMsg);
 
-    robot_controller::StateCov stateCovMsg;
-    P = estimator.getCovariance();
-    for(int i=0;i<P.rows();i++){
-      stateCovMsg.P[i] = P(i,i);
-    }
-    stateCovMsg.tStamp = tsNow.toSec();
-    pubStateCov.publish(stateCovMsg);
+    // robot_controller::StateCov stateCovMsg;
+    // P = estimator.getCovariance();
+    // for(int i=0;i<P.rows();i++){
+    //   stateCovMsg.P[i] = P(i,i);
+    // }
+    // stateCovMsg.tStamp = tsNow.toSec();
+    // pubStateCov.publish(stateCovMsg);
 
     ros::spinOnce();
     loop_rate.sleep();

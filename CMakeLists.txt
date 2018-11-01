@@ -16,6 +16,7 @@ set(EIGEN3_INCLUDE_DIRS /usr/share/eigen)
 
 add_message_files(DIRECTORY ${PROJECT_SOURCE_DIR}/msg FILES
   State.msg
+  Meas.msg
 )
 
 generate_messages( DEPENDENCIES
