@@ -48,7 +48,7 @@ int main(int argc, char** argv){
   while(ros::ok()){
     if(!estimator.initialized()){
       //Do things
-      if(tsMeas.toSec() != 0){
+      if(tsMeas.toSec() == 0){
         ros::spinOnce();
         loop_rate.sleep();
         continue;
