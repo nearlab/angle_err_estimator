@@ -24,8 +24,8 @@ void Estimator::predict(const double& dt){
   Eigen::Matrix3d i2 = Eigen::MatrixXd::Identity(2,2);
   F << i2, i2*dt,
        z2, i2;
-  M << 1/2*dt^2*i2, z2
-       z2         , dt*i2;
+  M << 1/2*dt*dt*i2, z2
+       z2          , dt*i2;
 
   this->P = F*this->P*F.transpose() + M*this->params.Q*M.transpose();
 }
@@ -50,7 +50,7 @@ Eigen::MatrixXd Estimator::parseMeas(const Eigen::VectorXd& zMarkersRaw){
   return H;
 }
 void Estimator::initialize(const Eigen::VectorXd& z){
-  this.state << z;
+  this.state.head(4) << z.head(4);
   this->isInitialized = true;
 }
 Eigen::VectorXd Estimator::getState(){
