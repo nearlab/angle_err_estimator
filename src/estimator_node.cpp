@@ -6,6 +6,7 @@
 
 #include "pv_estimator/State.h"
 #include "pv_estimator/Meas.h"
+#include "estimator.h"
 
 #include <string>
 #include <cstring>
@@ -38,7 +39,7 @@ int main(int argc, char** argv){
   ros::NodeHandle nh;
   tsMeas = ros::Time(0);
 
-  subImu = nh.subscribe(std::string("/meas"),1000,measCallback);
+  subMeas = nh.subscribe(std::string("/meas"),1000,measCallback);
   pubState = nh.advertise<pv_estimator::State>(std::string("/state"),1000);
   ros::Rate loop_rate(100);
   ros::Time tsMeasOld;
@@ -52,7 +53,7 @@ int main(int argc, char** argv){
         loop_rate.sleep();
         continue;
       }
-      estimator.estimateStateFromMarkers(zMarkers);
+      estimator.initialize(z);
       ROS_INFO("Estimator Initialized");
     }else{// Predict and Correct
       double dtMeas = ((ros::Duration)(tsMeas - tsMeasOld)).toSec();
