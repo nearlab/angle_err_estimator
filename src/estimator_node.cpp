@@ -46,7 +46,7 @@ int main(int argc, char** argv){
   ROS_INFO("Estimator Node Initialized");
 
   while(ros::ok()){
-    if(!estimator.isInitialized()){
+    if(!estimator.initialized()){
       //Do things
       if(tsMeas.toSec() == 0){
         ros::spinOnce();
