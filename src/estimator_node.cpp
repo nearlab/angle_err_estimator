@@ -23,7 +23,7 @@ ros::Subscriber subMeas;
 
 ros::Time tsMeas;
 
-void measCallback(const angle_err_estimator::Meas msg){
+void measCallback(const pv_estimator::Meas msg){
   tsMeas = ros::Time(msg.tStamp);
   z(0) = msg.r[0];
   z(1) = msg.r[1];
@@ -39,7 +39,7 @@ int main(int argc, char** argv){
   tsMeas = ros::Time(0);
 
   subImu = nh.subscribe(std::string("/meas"),1000,measCallback);
-  pubState = nh.advertise<angle_err_estimator::State>(std::string("/state"),1000);
+  pubState = nh.advertise<pv_estimator::State>(std::string("/state"),1000);
   ros::Rate loop_rate(100);
   ros::Time tsMeasOld;
   ROS_INFO("Estimator Node Initialized");
@@ -62,7 +62,7 @@ int main(int argc, char** argv){
     tsMeasOld = ros::Time().fromNSec(tsMeas.toNSec());
     
     // Fill message
-    angle_err_estimator::State stateMsg;
+    pv_estimator::State stateMsg;
     state = estimator.getState();
     for(int i=0;i<2;i++){
       stateMsg.r[i] = state(i);

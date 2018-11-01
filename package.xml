@@ -1,8 +1,8 @@
 <package>
-  <name>robot_estimator</name>
+  <name>pv_estimator</name>
   <version>0.0.1</version>
   <description>
-    For a robot, one would suppose
+    Estimates position and velocity given position and velocity measurements. Super simple, baybee.
   </description>
   <license>MIT</license>
   <maintainer email="jtb2013@gmail.com">James Bell</maintainer>
