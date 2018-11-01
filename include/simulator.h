@@ -2,7 +2,6 @@
 #define SIMULATOR_H
 
 #include <Eigen/Dense>
-#include "quatMath.h"
 #include <vector>
 #include "params.h"
 

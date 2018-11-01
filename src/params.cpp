@@ -11,3 +11,4 @@ Params::Params(){
 
   //Set up measurement covariance matrix
   this->R.setIdentity();
+}
