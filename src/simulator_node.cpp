@@ -22,7 +22,7 @@ int main(int argc, char** argv){
   ros::Rate loop_rate(100);
   ROS_INFO("Simulation Node Initialized");
 
-  ros::Time t(0);
+  double tStart = ros::Time::now().toSec();
   double T = 5;//Period of circle
   double r = 2;
   double pi = 3.1415926536;
@@ -31,6 +31,7 @@ int main(int argc, char** argv){
   while(ros::ok()){
     Eigen::VectorXd z(4), state(4);
 
+    double t = ros::Time::now().toSec() - tStart;
     double rx = r*cos(t*2*pi/T);
     double ry = r*sin(t*2*pi/T);
     double vx = -r*2*pi/T*sin(t*2*pi/T);
