@@ -6,13 +6,13 @@
   <!-- Mass of spacecraft -->
   <rosparam param="mass"> 30 </rosparam>
 
-  <node pkg="robot_estimator"
+  <node pkg="pv_estimator"
     type="simulator_node"
     name="simulator_node"
     output="screen">
   </node>
   
-  <node pkg="robot_estimator"
+  <node pkg="pv_estimator"
     type="estimator_node"
     name="estimator_node"
     output="screen">
