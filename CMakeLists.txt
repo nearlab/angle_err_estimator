@@ -49,7 +49,7 @@ add_executable(simulator_node
                src/simulator.cpp
                src/params.cpp)
 
-set(EXEC_LIST estimator_node)
+set(EXEC_LIST estimator_node simulator_node)
 foreach(EXEC_FILE ${EXEC_LIST})
   target_link_libraries(${EXEC_FILE} ${catkin_LIBRARIES} Eigen3::Eigen)
   add_dependencies(${EXEC_FILE} ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
