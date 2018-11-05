@@ -40,7 +40,7 @@ void Estimator::correct(const Eigen::VectorXd& z){
   Eigen::VectorXd dx = K*zHatError;
 
   this->state += dx;
-  this->P = (Eigen::MatrixXd::Identity(12,12)-K*H)*this->P*(Eigen::MatrixXd::Identity(12,12)-K*H).transpose()+K*R*K.transpose();
+  this->P = (Eigen::MatrixXd::Identity(4,4)-K*H)*this->P*(Eigen::MatrixXd::Identity(4,4)-K*H).transpose()+K*R*K.transpose();
   this->P = .5*(this->P + (this->P).transpose());
 }
 Eigen::MatrixXd Estimator::parseMeas(const Eigen::VectorXd& zMarkersRaw){

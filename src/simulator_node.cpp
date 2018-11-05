@@ -36,12 +36,7 @@ int main(int argc, char** argv){
     state(2) = -r*2*pi/T*sin(t*2*pi/T);
     state(3) = r*2*pi*T*cos(t*2*pi/T);
     
-    Eigen::VectorXd blah(4);
-    ROS_INFO("HERE");
-    blah = measSimulator(state,params);
-    ROS_INFO("NOW HERE");
-    z << blah;
-    ROS_INFO("FINALLY HERE");
+    z << measSimulator(state,params);
     // Fill messages
     pv_estimator::State stateMsg;
     pv_estimator::Meas measMsg;

@@ -64,7 +64,7 @@ int main(int argc, char** argv){
     
     // Fill message
     pv_estimator::State stateMsg;
-    state = estimator.getState();
+    state << estimator.getState();
     for(int i=0;i<2;i++){
       stateMsg.r[i] = state(i);
       stateMsg.v[i] = state(i+2);
