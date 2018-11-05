@@ -44,6 +44,10 @@ add_executable(estimator_node
                src/simulator.cpp
                src/params.cpp
                src/estimator.cpp)
+add_executable(simulator_node
+               src/simulator_node.cpp
+               src/simulator.cpp
+               src/params.cpp)
 
 set(EXEC_LIST estimator_node)
 foreach(EXEC_FILE ${EXEC_LIST})
