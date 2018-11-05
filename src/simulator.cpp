@@ -1,6 +1,6 @@
 #include "simulator.h"
 
-Eigen::VectorXd measSimulator(const Eigen::VectorXd& state, const Params& params, const bool& noise){
+Eigen::VectorXd measSimulator(const Eigen::VectorXd& state, Params& params, const bool& noise){
   Eigen::VectorXd z(4);
   z << state;
   if(noise){
