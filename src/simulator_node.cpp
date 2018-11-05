@@ -15,9 +15,8 @@ int main(int argc, char** argv){
   ros::init(argc,argv,"simulator");
   std::string robotName;
   ros::NodeHandle nh;
-  tsMeas = ros::Time(0);
 
-  pubMeas = nh.advertise<pv_estimator::Meas>(std::string("/meas"),1000,measCallback);
+  pubMeas = nh.advertise<pv_estimator::Meas>(std::string("/meas"),1000);
   pubState = nh.advertise<pv_estimator::State>(std::string("/state_truth"),1000);
   ros::Rate loop_rate(100);
   ROS_INFO("Simulation Node Initialized");
@@ -26,7 +25,7 @@ int main(int argc, char** argv){
   double T = 5;//Period of circle
   double r = 2;
   double pi = 3.1415926536;
-  Params params();
+  Params params = Params();
 
   while(ros::ok()){
     Eigen::VectorXd z(4), state(4);
@@ -52,7 +51,7 @@ int main(int argc, char** argv){
     stateMsg.tStamp = tsNow.toSec();
     measMsg.tStamp = tsNow.toSec();
     pubState.publish(stateMsg);
-    pubMeas.public(measMsg);
+    pubMeas.publish(measMsg);
     
 
     ros::spinOnce();
