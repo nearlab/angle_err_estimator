@@ -20,8 +20,8 @@ void Estimator::predict(const double& dt){
   Eigen::MatrixXd F,M;
   F = Eigen::MatrixXd(4,4);
   M = Eigen::MatrixXd(4,4);
-  Eigen::Matrix3d z2 = Eigen::MatrixXd::Zero(2,2);
-  Eigen::Matrix3d i2 = Eigen::MatrixXd::Identity(2,2);
+  Eigen::MatrixXd z2 = Eigen::MatrixXd::Zero(2,2);
+  Eigen::MatrixXd i2 = Eigen::MatrixXd::Identity(2,2);
   F << i2, i2*dt,
        z2, i2;
   M << 1/2*dt*dt*i2, z2,
