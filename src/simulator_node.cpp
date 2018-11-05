@@ -31,12 +31,11 @@ int main(int argc, char** argv){
     Eigen::VectorXd z(4), state(4);
 
     double t = ros::Time::now().toSec() - tStart;
-    double rx = r*cos(t*2*pi/T);
-    double ry = r*sin(t*2*pi/T);
-    double vx = -r*2*pi/T*sin(t*2*pi/T);
-    double vy = r*2*pi*T*cos(t*2*pi/T);
+    state(0) = r*cos(t*2*pi/T);
+    state(1) = r*sin(t*2*pi/T);
+    state(2) = -r*2*pi/T*sin(t*2*pi/T);
+    state(3) = r*2*pi*T*cos(t*2*pi/T);
     
-    state << rx,ry,vx,vy;
     z << measSimulator(state,params);
     // Fill messages
     pv_estimator::State stateMsg;
