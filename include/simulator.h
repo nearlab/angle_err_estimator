@@ -5,6 +5,6 @@
 #include <vector>
 #include "params.h"
 
-Eigen::VectorXd measSimulator(const Eigen::VectorXd& state, const Params& params);
+Eigen::VectorXd measSimulator(const Eigen::VectorXd& state, const Params& params, const bool& noise = false);
 
 #endif
