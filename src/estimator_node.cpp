@@ -39,8 +39,8 @@ int main(int argc, char** argv){
   ros::NodeHandle nh;
   tsMeas = ros::Time(0);
 
-  subMeas = nh.subscribe(std::string("/meas"),1000,measCallback);
-  pubState = nh.advertise<pv_estimator::State>(std::string("/state"),1000);
+  subMeas = nh.subscribe(std::string("/tracker/meas"),1000,measCallback);
+  pubState = nh.advertise<pv_estimator::State>(std::string("/tracker/state"),1000);
   ros::Rate loop_rate(100);
   ros::Time tsMeasOld;
   ROS_INFO("Estimator Node Initialized");
